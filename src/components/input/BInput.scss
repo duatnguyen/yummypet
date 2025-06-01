@@ -1,0 +1,49 @@
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.required {
+  color: red;
+}
+
+.input-field {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+  outline: none;
+  transform: scale(1.02);
+}
+
+.input-error {
+  border-color: red;
+}
+
+.input-error-message {
+  font-size: 12px;
+  color: red;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .input-wrapper {
+    max-width: 100%;
+  }
+}

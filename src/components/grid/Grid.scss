@@ -1,0 +1,19 @@
+.grid-container {
+  display: grid;
+  width: 100%;
+  margin: 0 auto;
+  gap: 1rem;
+
+  /* Các media query được đặt trực tiếp trong SCSS */
+  @media (max-width: 575px) {
+    grid-template-columns: repeat(1, 1fr); /* Màn hình nhỏ */
+  }
+
+  @media (min-width: 576px) and (max-width: 767px) {
+    grid-template-columns: repeat(2, 1fr); /* Màn hình trung bình */
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr); /* Màn hình lớn */
+  }
+}
