@@ -1,19 +1,16 @@
 package com.yummypet.entity;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 
-import com.yummypet.enums.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,41 +20,34 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "customers")
 @Getter
 @Setter
 @ToString
+@Table(name = "users")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "customerCode")
-    private String customerCode;
+    @Column(nullable = false, unique = true, length = 100)
+    private String username;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    @ToString.Exclude
-    private User user;
-
-    private String fullName;
-    private String phone;
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
-    private String address;
-    private LocalDate dateOfBirth;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
 
-    @Builder.Default
-    private Integer loyaltyPoints = 0;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    @JsonIgnoreProperties({"users", "createdAt"})
+    @ToString.Exclude
+    private Role role;
 
     @Column(name = "is_active")
-    @Builder.Default
     private Boolean isActive = true;
 
     @Column(name = "created_at")

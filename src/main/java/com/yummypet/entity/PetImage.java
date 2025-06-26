@@ -16,19 +16,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "product_images")
+@Table(name = "pet_images")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductImage {
+public class PetImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @JoinColumn(name = "pet_id", nullable = false)
+    private Pet pet;
 
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
