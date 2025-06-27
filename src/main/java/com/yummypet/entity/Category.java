@@ -13,10 +13,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,16 +27,15 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "categories")
-@Getter
-@Setter
-@ToString
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Category parent;
 
     @Column(nullable = false, unique = true, length = 100)
     private String name;
@@ -47,11 +49,9 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     @JsonIgnore
-    @ToString.Exclude
     private List<Product> products;
 
     @Column(name = "is_active")
-    @Builder.Default
     private Boolean isActive = true;
 
     @Column(name = "created_at")

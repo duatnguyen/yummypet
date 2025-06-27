@@ -19,9 +19,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -31,75 +32,84 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // Frontend URL
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); // Frontend URL
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setExposedHeaders(List.of("Authorization"));
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config
-    ) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }    @Bean 
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {        
-        return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable)                .authorizeHttpRequests(auth -> auth
-                        // Auth endpoints - Public access
-                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/forgot-password", "/api/auth/reset-password", "/api/auth/reset-password/**").permitAll()
-                        .requestMatchers("/api/auth/create-user").hasAuthority("admin")
-                        
-                        // Public product/pet/service endpoints
-                        .requestMatchers("/api/products", "/api/products/**").permitAll()
-                        .requestMatchers("/api/pets", "/api/pets/**").permitAll()
-                        .requestMatchers("/api/services", "/api/services/**").permitAll()
-                        .requestMatchers("/api/categories", "/api/categories/**").permitAll()
-                        
-                        // Voucher endpoints
-                        .requestMatchers("/api/vouchers/active", "/api/vouchers/valid", "/api/vouchers/validate").permitAll()
-                        .requestMatchers("/api/vouchers/**").hasAuthority("admin")
-                        
-                        // Employee management - Admin only for CRUD, Staff can view
-                        .requestMatchers("/api/employees").hasAuthority("admin")
-                        .requestMatchers("/api/employees/{id}/**").hasAnyAuthority("admin", "staff")
-                        .requestMatchers("/api/employees/code/**").hasAnyAuthority("admin", "staff")
-                        
-                        // Customer management
-                        .requestMatchers("/api/customers").hasAnyAuthority("admin", "staff")
-                        .requestMatchers("/api/customers/**").hasAnyAuthority("customer", "staff", "admin")
-                        
-                        // Loyalty points - access controlled by method security
-                        .requestMatchers("/api/loyalty-points/**").hasAnyAuthority("customer", "staff", "admin")
-                        
-                        // Orders
-                        .requestMatchers("/api/orders/**").hasAnyAuthority("customer", "staff", "admin")
-                        
-                        // Cart
-                        .requestMatchers("/api/cart/**").hasAnyAuthority("customer", "staff", "admin")
-                        
-                        // Admin specific endpoints
-                        .requestMatchers("/api/admin/**").hasAuthority("admin")
-                        .requestMatchers("/api/statistics/**").hasAuthority("admin")
+    }
 
-                        
-                        // Default - require authentication
-                        .anyRequest().authenticated()
-                )
-                .exceptionHandling(e -> e.accessDeniedHandler(accessDeniedHandler)
-                        .authenticationEntryPoint(authenticationEntryPoint))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+    @Bean 
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {        
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth
+                // Auth endpoints - Public access
+                .requestMatchers(
+                    "/api/auth/login",
+                    "/api/auth/register",
+                    "/api/auth/forgot-password",
+                    "/api/auth/reset-password",
+                    "/api/auth/reset-password/**"
+                ).permitAll()
+                .requestMatchers("/api/auth/create-user").hasAuthority("admin")
+                
+                // Public product/pet/service endpoints
+                .requestMatchers(
+                    "/api/products/**",
+                    "/api/pets/**",
+                    "/api/services/**",
+                    "/api/categories/**"
+                ).permitAll()
+                
+                // Voucher endpoints
+                .requestMatchers(
+                    "/api/vouchers/active",
+                    "/api/vouchers/valid",
+                    "/api/vouchers/validate"
+                ).permitAll()
+                .requestMatchers("/api/vouchers/**").hasAuthority("admin")
+                
+                // Employee management
+                .requestMatchers("/api/employees").hasAuthority("admin")
+                .requestMatchers("/api/employees/{id}/**", "/api/employees/code/**")
+                    .hasAnyAuthority("admin", "staff")
+                
+                // Customer management
+                .requestMatchers("/api/customers").hasAnyAuthority("admin", "staff")
+                .requestMatchers("/api/customers/**").hasAnyAuthority("customer", "staff", "admin")
+                
+                // Other endpoints
+                .requestMatchers("/api/loyalty-points/**", "/api/orders/**", "/api/cart/**")
+                    .hasAnyAuthority("customer", "staff", "admin")
+                
+                // Admin specific endpoints
+                .requestMatchers("/api/admin/**", "/api/statistics/**").hasAuthority("admin")
+                
+                // Default - require authentication
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling(e -> e
+                .accessDeniedHandler(accessDeniedHandler)
+                .authenticationEntryPoint(authenticationEntryPoint)
+            )
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            
+        return http.build();
     }
 }

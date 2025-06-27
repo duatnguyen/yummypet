@@ -1,11 +1,14 @@
 package com.yummypet.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     private boolean success;
     private String message;

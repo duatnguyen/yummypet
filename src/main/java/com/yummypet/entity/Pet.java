@@ -4,10 +4,7 @@ import java.math.BigDecimal;
 import java.security.Timestamp;
 import java.time.LocalDate;
 
-import com.yummypet.enums.Gender;
-import com.yummypet.enums.HealthStatus;
-import com.yummypet.enums.PetStatus;
-import com.yummypet.enums.VaccinationStatus;
+import com.yummypet.enums.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

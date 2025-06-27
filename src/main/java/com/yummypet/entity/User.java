@@ -22,11 +22,12 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"role", "passwordHash"})
 @Table(name = "users")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +44,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
-    @JsonIgnoreProperties({"users", "createdAt"})
-    @ToString.Exclude
+    @JsonIgnoreProperties({"users", "description", "createdAt"})
     private Role role;
 
     @Column(name = "is_active")

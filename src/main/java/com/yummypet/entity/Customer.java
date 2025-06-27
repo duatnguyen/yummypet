@@ -3,7 +3,8 @@ package com.yummypet.entity;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-import com.yummypet.enums.Gender;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.yummypet.enums.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,10 +27,11 @@ import lombok.ToString;
 @Table(name = "customers")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"user"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +42,7 @@ public class Customer {
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @com.fasterxml.jackson.annotation.JsonIgnore
-    @ToString.Exclude
+    @JsonIgnoreProperties({"passwordHash", "role", "createdAt", "updatedAt"})
     private User user;
 
     private String fullName;
