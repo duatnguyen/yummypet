@@ -70,7 +70,42 @@ public class EmployeeService {
 
     }
 
+    @Transactional
+    public EmployeeDTO updateEmployee(Integer id, UpdateEmployeeRequest request) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + id));
 
+        if (request.getFullName() != null) {
+            employee.setFullName(request.getFullName());
+        }
+        if (request.getPhone() != null) {
+            employee.setPhone(request.getPhone());
+        }
+        if (request.getAddress() != null) {
+            employee.setAddress(request.getAddress());
+        }
+        if (request.getDateOfBirth() != null) {
+            employee.setDateOfBirth(request.getDateOfBirth());
+        }
+        if (request.getSalary() != null) {
+            employee.setSalary(request.getSalary());
+        }
+        if (request.getPosition() != null) {
+            employee.setPosition(request.getPosition());
+        }
+        if (request.getDepartment() != null) {
+            employee.setDepartment(request.getDepartment());
+        }
+        if (request.getIsActive() != null) {
+            employee.setIsActive(request.getIsActive());
+            employee.getUser().setIsActive(request.getIsActive());
+        }
+        employee.setUpdatedAt(Timestamp.from(Instant.now()));
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        log.info("Updated employee with code: {}", savedEmployee.getEmployeeCode());
+        return convertToDTO(savedEmployee);
+    }
 
 
 
