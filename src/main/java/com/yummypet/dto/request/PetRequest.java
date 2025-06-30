@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yummypet.enums.HealthStatus;
+import com.yummypet.enums.PetStatus;
 import com.yummypet.enums.VaccinationStatus;
 
 import jakarta.validation.Valid;
@@ -34,7 +35,7 @@ public class PetRequest {
     @NotBlank(message = "Tuổi không được để trống")
     @Min(value = 0, message = "Tuổi phải lớn hơn 0")
     @Max(value = 100, message = "Tuổi phải nhỏ hơn 100")
-    private Integer ageMonth;
+    private Integer ageMonths;
 
     @NotBlank(message = "Mô tả không được để trống")
     @Size(max = 500, message = "Mô tả phải có độ dài từ 2 đến 500 ký tự")
@@ -54,7 +55,7 @@ public class PetRequest {
 
     @NotBlank(message = "Cân nặng không được để trống")
     @Size(max = 100, message = "Cân nặng phải có độ dài từ 2 đến 100 ký tự")
-    private String weight;
+    private BigDecimal weight;
 
     @NotBlank(message = "Tình trạng sức khỏe không được để trống")
     @Size(max = 100, message = "Tình trạng sức khỏe phải có độ dài từ 2 đến 100 ký tự")
@@ -72,7 +73,7 @@ public class PetRequest {
     private VaccinationStatus vaccinationStatus = VaccinationStatus.unknown;
 
     @NotNull(message = "Trạng thái hoạt động không được để trống")
-    private boolean isActive = true;
+    private Boolean isActive = true;
 
     @DecimalMin(value = "0.0", message = "Giá nhập phải lớn hơn hoặc bằng 0")
     private BigDecimal costPrice;
@@ -80,6 +81,11 @@ public class PetRequest {
     @NotNull(message = "Giá không được để trống")
     @DecimalMin(value = "0.0", message = "Giá phải lớn hơn hoặc bằng 0")
     private BigDecimal price;
+
+    @NotBlank(message = "Trạng thái không được để trống")
+    @Size(max = 100, message = "Trạng thái phải có độ dài từ 2 đến 100 ký tự")
+    private PetStatus status = PetStatus.available;
+
 
     @Valid
     private List<PetImageRequest> images = new ArrayList<>();

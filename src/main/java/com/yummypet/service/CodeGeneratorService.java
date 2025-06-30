@@ -11,4 +11,8 @@ public class CodeGeneratorService {
     public String generateEmployeeCode() {  
         return "EMP" + System.currentTimeMillis();
     }
+
+    public String generatePetCode() {
+        return "PET" + System.currentTimeMillis();
+    }
 }

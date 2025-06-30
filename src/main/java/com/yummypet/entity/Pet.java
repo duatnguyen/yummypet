@@ -1,31 +1,25 @@
 package com.yummypet.entity;
 
 import java.math.BigDecimal;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
-import com.yummypet.enums.*;
+import com.yummypet.enums.Gender;
+import com.yummypet.enums.HealthStatus;
+import com.yummypet.enums.PetStatus;
+import com.yummypet.enums.VaccinationStatus;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "pets")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Pet {
