@@ -1,9 +1,10 @@
 package com.yummypet.dto.ath;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponse {
     private String token;

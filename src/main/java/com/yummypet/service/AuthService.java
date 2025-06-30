@@ -3,6 +3,7 @@ package com.yummypet.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import com.yummypet.dto.ath.LoginRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +17,6 @@ import com.yummypet.entity.CreateUserRequest;
 import com.yummypet.entity.Customer;
 import com.yummypet.entity.Employee;
 import com.yummypet.entity.JwtBlacklist;
-import com.yummypet.entity.LoginRequest;
 import com.yummypet.entity.RegisterRequest;
 import com.yummypet.entity.Role;
 import com.yummypet.entity.User;
@@ -96,7 +96,7 @@ public class AuthService {
         userRepository.save(user);
 
         Employee employee = Employee.builder()
-                .employeeCode(codeGeneratorService.generateEmployeeCode())
+//                .employeeCode(codeGeneratorService.generateEmployeeCode())
                 .hireDate(request.getHireDate())
                 .user(user)
                 .fullName(request.getFullName())

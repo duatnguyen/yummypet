@@ -48,10 +48,25 @@ public class CodeGeneratorService {
         return code;
     }
 
-    /**
-     * Tạo mã đơn hàng duy nhất
-     * Format: ORD + YYYYMMDD + 4 số (ví dụ: ORD202506190001)
-     */
+//    @Transactional(readOnly = true)
+//    public String generateEmployeeCode() {
+//        long maxId = employeeRepository.findMaxId().orElse(0);
+//        String code;
+//        int attempts = 0;
+//        final int MAX_ATTEMPTS = 10;
+//
+//        do {
+//            code = String.format("EMP%06d", maxId + 1 + attempts);
+//            attempts++;
+//        } while (employeeRepository.existsByEmployeeCode(code) && attempts < MAX_ATTEMPTS);
+//
+//        if (attempts >= MAX_ATTEMPTS) {
+//            throw new RuntimeException("Cannot generate unique employee code after " + MAX_ATTEMPTS + " attempts");
+//        }
+//
+//        log.debug("Generated employee code: {}", code);
+//        return code;
+//    }
 
     /**
      * Validate format của customer code
