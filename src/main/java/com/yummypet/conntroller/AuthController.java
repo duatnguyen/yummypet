@@ -1,5 +1,6 @@
 package com.yummypet.conntroller;
 
+import com.yummypet.dto.ath.LoginRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +12,6 @@ import com.yummypet.config.JwtService;
 import com.yummypet.dto.ApiResponse;
 import com.yummypet.dto.ath.LoginResponse;
 import com.yummypet.entity.CreateUserRequest;
-import com.yummypet.entity.LoginRequest;
 import com.yummypet.entity.RegisterRequest;
 import com.yummypet.service.AuthService;
 
