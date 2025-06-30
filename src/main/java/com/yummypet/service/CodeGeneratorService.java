@@ -102,4 +102,8 @@ public class CodeGeneratorService {
     public boolean isValidEmployeeCode(String code) {
         return code != null && code.matches("^EMP\\d{6}$");
     }
+
+    public String generatePetCode() {
+        return "PET" + System.currentTimeMillis();
+    }
 }
